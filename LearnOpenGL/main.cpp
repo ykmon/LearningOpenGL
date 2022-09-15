@@ -223,7 +223,6 @@ int main() {
 		projMat = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
 	#pragma endregion
 
-
 	// 渲染循环
 	while (!glfwWindowShouldClose(window))//检测某个窗是否被关闭
 	{
@@ -233,8 +232,6 @@ int main() {
 		glClearColor(0.0f, 0.3f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);//清除上一帧的颜色缓冲和深度缓冲
 		
-		
-
 		viewMat = camera.GetViewMatrix();
 
 		for (int i = 0; i < 10; i++)
@@ -259,7 +256,8 @@ int main() {
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-			
+			glUniform3f(glGetUniformLocation(myShader->ID, "objColor"), 1.0f, 0.5f, 0.31f);
+			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 1.0f, 1.0f, 1.0f);
 			// 设置模型
 			glBindVertexArray(VAO);
 
