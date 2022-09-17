@@ -8,7 +8,7 @@ in vec3 Normal;
 struct Material{
 	vec3 ambient;
 	sampler2D diffuse;
-	vec3 specular;
+	sampler2D specular;
 	float shininess;
 };
 
@@ -40,7 +40,7 @@ void main(){
 	//Phong镜面反射
 	vec3 reflectDir = reflect(-lightDir,normal);
 	float specularAmount = pow(max(dot(reflectDir,cameraVec),0),material.shininess);
-	vec3 specular = material.specular * coefficient * specularAmount * lightColor;
+	vec3 specular = texture(material.specular,TexCoord).rgb * coefficient * specularAmount * lightColor;
 
 	//环境光
 	vec3 ambient = material.ambient * ambientColor * texture(material.diffuse, TexCoord).rgb;

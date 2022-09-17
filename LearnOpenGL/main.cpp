@@ -223,7 +223,7 @@ int main() {
 	#pragma region 材质属性Init Material
 		Material* myMaterial = new Material(myShader,
 				LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, 0),//diffuse
-				glm::vec3 (1.0f, 1.0f, 1.0f),//specular
+				LoadImageToGPU("container2_specular.png", GL_RGBA, GL_RGBA, 1),//specular
 				glm::vec3 (1.0f, 1.0f, 1.0f), //ambient
 				32.0f);//shininess
 	#pragma endregion
@@ -314,7 +314,7 @@ int main() {
 			myMaterial->shader->SetUniform3f("material.ambient", myMaterial->ambient);
 			//myMaterial->shader->SetUniform3f("material.diffuse", myMaterial->diffuse);
 			myMaterial->shader->SetUniform1i("material.diffuse", 0);
-			myMaterial->shader->SetUniform3f("material.specular", myMaterial->specular);
+			myMaterial->shader->SetUniform1i("material.specular", 1);
 			myMaterial->shader->SetUniform1f("material.shininess", myMaterial->shininess);
 
 			// 设置模型
