@@ -221,11 +221,11 @@ int main() {
 	#pragma endregion
 
 	#pragma region 材质属性Init Material
-			Material* myMaterial = new Material(myShader,
-				glm::vec3 (1.0f, 1.0f, 1.0f),//diffuse
+		Material* myMaterial = new Material(myShader,
+				LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, 0),//diffuse
 				glm::vec3 (1.0f, 1.0f, 1.0f),//specular
 				glm::vec3 (1.0f, 1.0f, 1.0f), //ambient
-				64.0f);//shininess
+				32.0f);//shininess
 	#pragma endregion
 
 	#pragma region Init and Load Models to VAO, VBO
@@ -246,10 +246,11 @@ int main() {
 		//// 颜色属性
 		//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 		//glEnableVertexAttribArray(1);
-		// UV
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		// 法线
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+		// UV
+		glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 		glEnableVertexAttribArray(3);
 
 	#pragma endregion
@@ -257,10 +258,10 @@ int main() {
 	stbi_set_flip_vertically_on_load(true);//上下颠倒
 
 	#pragma region Init and Load Textures
-		unsigned int TexBufferA;
+		/*unsigned int TexBufferA;
 		TexBufferA = LoadImageToGPU("container.jpg", GL_RGB, GL_RGB, 0);
 		unsigned int TexBufferB;
-		TexBufferB = LoadImageToGPU("awesomeface.png", GL_RGBA, GL_RGBA, 1);
+		TexBufferB = LoadImageToGPU("awesomeface.png", GL_RGBA, GL_RGBA, 1);*/
 	#pragma endregion
 	
 	#pragma region 准备MVP矩阵
@@ -294,24 +295,25 @@ int main() {
 			// 设置材质 -> Shader代码
 			myShader->use();
 			// 设置材质 -> 贴图
-			glActiveTexture(GL_TEXTURE0);
+			/*glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, TexBufferA);
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, TexBufferB);
+			glBindTexture(GL_TEXTURE_2D, TexBufferB);*/
 			// 设置材质 -> Uniforms
-			glUniform1i(glGetUniformLocation(myShader->ID, "ourTexture"), 0);
-			glUniform1i(glGetUniformLocation(myShader->ID, "ourFace"), 1);
+			/*glUniform1i(glGetUniformLocation(myShader->ID, "ourTexture"), 0);
+			glUniform1i(glGetUniformLocation(myShader->ID, "ourFace"), 1);*/
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 1.0f, 0.5f, 0.3f);
+			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 0.5f, 0.5f, 0.5f);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightPos"), 0.0f, 5.0f, 5.0f);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightColor"), 1.0f, 1.0f, 1.0f);
 			glUniform3f(glGetUniformLocation(myShader->ID, "cameraPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 
 			//未封装前调用格式glUniform3f(glGetUniformLocation(myShader->ID, "material.ambient"), myMaterial->ambient);
 			myMaterial->shader->SetUniform3f("material.ambient", myMaterial->ambient);
-			myMaterial->shader->SetUniform3f("material.diffuse", myMaterial->diffuse);
+			//myMaterial->shader->SetUniform3f("material.diffuse", myMaterial->diffuse);
+			myMaterial->shader->SetUniform1i("material.diffuse", 0);
 			myMaterial->shader->SetUniform3f("material.specular", myMaterial->specular);
 			myMaterial->shader->SetUniform1f("material.shininess", myMaterial->shininess);
 
