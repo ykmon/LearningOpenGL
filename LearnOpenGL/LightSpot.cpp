@@ -1,6 +1,6 @@
-#include "LightDirectional.h"
+#include "LightSpot.h"
 
-LightDirectional::LightDirectional(glm::vec3 _position, glm::vec3 _angles, glm::vec3 _color):
+LightSpot::LightSpot(glm::vec3 _position, glm::vec3 _angles, glm::vec3 _color):
 	position(_position),
 	angles(_angles),
 	color(_color)
@@ -8,11 +8,12 @@ LightDirectional::LightDirectional(glm::vec3 _position, glm::vec3 _angles, glm::
 	UpdateDirection();
 }
 
-LightDirectional::~LightDirectional()
+LightSpot::~LightSpot()
 {
 }
 
-void LightDirectional::UpdateDirection() {
+void LightSpot::UpdateDirection()
+{
 	direction = glm::vec3(0, 0, 1.0f);//point to Z
 	// UnityÀïÐý×ªË³ÐòX,Y,Z
 	direction = glm::rotateZ(direction, angles.z);
