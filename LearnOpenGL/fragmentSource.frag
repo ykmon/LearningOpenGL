@@ -76,16 +76,16 @@ void main(){
 		emission =  emission * (sin(time) * 0.5 + 0.5) * 2.0;//fading
 	}
 
-//	float cosTheta = dot(normalize(FragPos-lightPos), lightDirUniform * -1);
-//	if( cosTheta > lightS.cosPhy) {
-//		//inside
-//		FragColor=vec4(ambient+(diffuse+specular)  +emission ,1.0f);
-//	}
-//	else{
-//		//outside
-//		FragColor=vec4(ambient,1.0f);
-//	}
+	float cosTheta = dot(normalize(FragPos-lightPos), lightDirUniform * -1);
+	if( cosTheta > lightS.cosPhy) {
+		//inside
+		FragColor=vec4(ambient+(diffuse+specular) ,1.0f);
+	}
+	else{
+		//outside
+		FragColor=vec4(ambient,1.0f);
+	}
 	//×îÖÕ»ìºÏ
 	//FragColor=vec4(ambient+(diffuse+specular) * coefficient +emission ,1.0f);
-	FragColor=vec4(diffuse+specular ,1.0f);
+
 }

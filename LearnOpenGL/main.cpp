@@ -85,9 +85,9 @@ Camera camera(glm::vec3(0, 0, 3.0f), glm::radians(15.0f), glm::radians(180.0f), 
 #pragma endregion
 
 #pragma region Light Declare
-// µã¹â
-LightSpot light = LightSpot(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(glm::radians(90.0f),0.0f,0.0f),
-	glm::vec3(1.0f, 0, 0));
+// ¾Û¹â
+LightSpot light = LightSpot(glm::vec3(0.0f, 2.0f, -5.0f), glm::vec3(glm::radians(45.0f),0.0f,0.0f),
+	glm::vec3(1.0f, 1.0f, 1.0f));
 
 #pragma endregion
 
@@ -308,7 +308,7 @@ int main() {
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "modelMat"), 1, GL_FALSE, glm::value_ptr(modelMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
-			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 0.5f, 0.5f, 0.5f);
+			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 0.1f, 0.1f, 0.1f);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightPos"), light.position.x, light.position.y, light.position.z);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightColor"), light.color.x, light.color.y, light.color.z);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightDirUniform"), light.direction.x, light.direction.y, light.direction.z);
