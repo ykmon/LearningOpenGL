@@ -38,9 +38,9 @@ void main(){
 	vec3 r=lightPos-FragPos;
 	vec3 lightDir = normalize(r);
 	//距离系数
-	float coefficient=1;
+	//float coefficient=1;
 	float d  = length(r);
-	//float coefficient = 1.0 / (LightP.constant + LightP.linear * d + LightP.quadratic * (d * d));
+	float coefficient= 1.0 / (LightP.constant + LightP.linear * d + LightP.quadratic * (d * d));
 	//法向
 	vec3 normal = normalize(Normal);
 	//漫反射
@@ -58,12 +58,14 @@ void main(){
 	//发光
 	vec3 emission;
 	if( texture(material.specular,TexCoord).rgb== vec3(0,0,0) ){
-		emission=   texture(material.emission,TexCoord).rgb;
-//		//fun
-//		emission = texture(material.emission,TexCoord + vec2(0.0,time/2)).rgb;//moving
-//		emission =  emission * (sin(time) * 0.5 + 0.5) * 2.0;//fading
+		emission=  1 * texture(material.emission,TexCoord).rgb;
+		//fun
+		emission = texture(material.emission,TexCoord + vec2(0.0,time/2)).rgb;//moving
+		emission =  emission * (sin(time) * 0.5 + 0.5) * 2.0;//fading
 	}
 
 	//最终混合
-	FragColor=vec4((diffuse  + specular + emission) * coefficient + ambient,1.0);//* objColor;
+	FragColor=vec4(ambient+(diffuse+specular+emission) * 1 ,1.0f);
+	//FragColor=vec4(coefficient,coefficient,coefficient ,1.0);
+	
 }
