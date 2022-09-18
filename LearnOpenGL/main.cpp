@@ -7,6 +7,8 @@
 #include"Shader.h"
 #include"Camera.h"
 #include"Material.h"
+#include"LightDirectional.h"
+#include"LightPoint.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -87,6 +89,13 @@ glm::vec3 cubePositions[] = {
 #pragma region Camera Declare
 //实例化相机  position 相机所在位置  pitch yaw  worldup 世界向上的向量
 Camera camera(glm::vec3(0, 0, 3.0f), glm::radians(15.0f), glm::radians(180.0f), glm::vec3(0, 1.0f, 0));//180度等于Z轴反向，欧拉角要注意坐标系
+#pragma endregion
+
+#pragma region Light Declare
+// 点光
+LightPoint light = LightPoint(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(glm::radians(45.0f),
+	glm::radians(45.0f),0), glm::vec3(1.0f,1.0f,1.0f));
+
 #pragma endregion
 
 #pragma region Input Declare
@@ -222,8 +231,9 @@ int main() {
 
 	#pragma region 材质属性Init Material
 		Material* myMaterial = new Material(myShader,
-				LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, 0),//diffuse
-				LoadImageToGPU("container2_specular.png", GL_RGBA, GL_RGBA, 1),//specular
+				LoadImageToGPU("container2.png", GL_RGBA, GL_RGBA, Shader::DIFFUSE),//diffuse
+				LoadImageToGPU("container2_specular.png", GL_RGBA, GL_RGBA, Shader::SPECULAR),//specular
+				LoadImageToGPU("matrix.jpg", GL_RGB, GL_RGB, Shader::EMISSION),
 				glm::vec3 (1.0f, 1.0f, 1.0f), //ambient
 				32.0f);//shininess
 	#pragma endregion
@@ -306,15 +316,18 @@ int main() {
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "viewMat"), 1, GL_FALSE, glm::value_ptr(viewMat));
 			glUniformMatrix4fv(glGetUniformLocation(myShader->ID, "projMat"), 1, GL_FALSE, glm::value_ptr(projMat));
 			glUniform3f(glGetUniformLocation(myShader->ID, "ambientColor"), 0.5f, 0.5f, 0.5f);
-			glUniform3f(glGetUniformLocation(myShader->ID, "lightPos"), 0.0f, 5.0f, 5.0f);
-			glUniform3f(glGetUniformLocation(myShader->ID, "lightColor"), 1.0f, 1.0f, 1.0f);
+			glUniform3f(glGetUniformLocation(myShader->ID, "lightPos"), light.position.x,light.position.y,light.position.z);
+			glUniform3f(glGetUniformLocation(myShader->ID, "lightColor"), light.color.x, light.color.y, light.color.z);
+			glUniform3f(glGetUniformLocation(myShader->ID, "lightDirUniform"), light.direction.x, light.direction.y, light.direction.z);
 			glUniform3f(glGetUniformLocation(myShader->ID, "cameraPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+
+			glUniform1f(glGetUniformLocation(myShader->ID, "time"), glfwGetTime());
 
 			//未封装前调用格式glUniform3f(glGetUniformLocation(myShader->ID, "material.ambient"), myMaterial->ambient);
 			myMaterial->shader->SetUniform3f("material.ambient", myMaterial->ambient);
-			//myMaterial->shader->SetUniform3f("material.diffuse", myMaterial->diffuse);
-			myMaterial->shader->SetUniform1i("material.diffuse", 0);
-			myMaterial->shader->SetUniform1i("material.specular", 1);
+			myMaterial->shader->SetUniform1i("material.diffuse", Shader::DIFFUSE);
+			myMaterial->shader->SetUniform1i("material.specular", Shader::SPECULAR);
+			myMaterial->shader->SetUniform1i("material.emission", Shader::EMISSION);
 			myMaterial->shader->SetUniform1f("material.shininess", myMaterial->shininess);
 
 			// 设置模型
