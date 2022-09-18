@@ -85,7 +85,7 @@ Camera camera(glm::vec3(0, 0, 3.0f), glm::radians(15.0f), glm::radians(180.0f), 
 
 #pragma region Light Declare
 // µã¹â
-LightPoint light = LightPoint(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f,0,0));
+LightPoint light = LightPoint(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 #pragma endregion
 
