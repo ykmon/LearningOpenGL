@@ -86,7 +86,7 @@ Camera camera(glm::vec3(0, 0, 3.0f), glm::radians(15.0f), glm::radians(180.0f), 
 
 #pragma region Light Declare
 // 聚光
-LightSpot light = LightSpot(glm::vec3(0.0f, 2.0f, -5.0f), glm::vec3(glm::radians(45.0f),0.0f,0.0f),
+LightSpot light = LightSpot(glm::vec3(0.0f, 5.0f, -3.0f), glm::vec3(glm::radians(90.0f),0.0f,0.0f),
 	glm::vec3(1.0f, 1.0f, 1.0f));
 
 #pragma endregion
@@ -298,10 +298,10 @@ int main() {
 			// 设置材质 -> Shader代码
 			myShader->use();
 			// 设置材质 -> 贴图
-			/*glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, TexBufferA);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, myMaterial->diffuse);
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, TexBufferB);*/
+			glBindTexture(GL_TEXTURE_2D, myMaterial->specular);
 			// 设置材质 -> Uniforms
 			/*glUniform1i(glGetUniformLocation(myShader->ID, "ourTexture"), 0);
 			glUniform1i(glGetUniformLocation(myShader->ID, "ourFace"), 1);*/
@@ -312,7 +312,8 @@ int main() {
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightPos"), light.position.x, light.position.y, light.position.z);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightColor"), light.color.x, light.color.y, light.color.z);
 			glUniform3f(glGetUniformLocation(myShader->ID, "lightDirUniform"), light.direction.x, light.direction.y, light.direction.z);
-			glUniform1f(glGetUniformLocation(myShader->ID, "lightS.cosPhy"), light.cosPhy);
+			glUniform1f(glGetUniformLocation(myShader->ID, "lightS.cosPhyInner"), light.cosPhyInner);
+			glUniform1f(glGetUniformLocation(myShader->ID, "lightS.cosPhyOutter"), light.cosPhyOutter);
 			/*glUniform1f(glGetUniformLocation(myShader->ID, "lightP.constant"), light.constant);
 			glUniform1f(glGetUniformLocation(myShader->ID, "lightP.linear"), light.linear);
 			glUniform1f(glGetUniformLocation(myShader->ID, "lightP.quadratic"), light.quadratic);*/

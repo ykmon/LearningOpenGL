@@ -22,9 +22,12 @@ struct LightPoint{
 uniform LightPoint LightP;
 
 struct LightSpot{
-	float cosPhy;
+	float cosPhyInner;
+	float cosPhyOutter;
 };
 uniform LightSpot lightS;
+
+
 
 uniform sampler2D ourTexture;
 uniform sampler2D ourFace;
@@ -76,16 +79,20 @@ void main(){
 		emission =  emission * (sin(time) * 0.5 + 0.5) * 2.0;//fading
 	}
 
+	float spotRatio;
 	float cosTheta = dot(normalize(FragPos-lightPos), lightDirUniform * -1);
-	if( cosTheta > lightS.cosPhy) {
+
+	if(cosTheta > lightS.cosPhyInner){
 		//inside
-		FragColor=vec4(ambient+(diffuse+specular) ,1.0f);
+		spotRatio = 1.0f;
+	}
+	else if (cosTheta > lightS.cosPhyOutter){
+		//middle
+		spotRatio =  (cosTheta - lightS.cosPhyOutter) / (lightS.cosPhyInner - lightS.cosPhyOutter);
 	}
 	else{
 		//outside
-		FragColor=vec4(ambient,1.0f);
+		spotRatio = 0;
 	}
-	//×îÖÕ»ìºÏ
-	//FragColor=vec4(ambient+(diffuse+specular) * coefficient +emission ,1.0f);
-
+	FragColor=vec4((ambient+(diffuse+specular) * spotRatio) ,1.0f);
 }
