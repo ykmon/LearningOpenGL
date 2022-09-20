@@ -87,7 +87,7 @@ Camera camera(glm::vec3(0, 0, 3.0f), glm::radians(15.0f), glm::radians(180.0f), 
 
 #pragma region Light Declare
 // ·½Ïò¹â
-LightDirectional lightD = LightDirectional(
+LightDirectional lightD(
 	glm::vec3(0.0f, 5.0f, -3.0f), 
 	glm::vec3(glm::radians(90.0f),0.0f,0.0f),
 	glm::vec3(0.0f, 1.0f, 0.0f)
