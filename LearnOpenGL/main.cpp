@@ -10,7 +10,8 @@
 #include"LightDirectional.h"
 #include"LightPoint.h"
 #include"LightSpot.h"
-
+#include"Mesh.h"
+#include"Model.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -201,8 +202,11 @@ unsigned int LoadImageToGPU(const char* filename, GLint internalFormat, GLenum f
 	stbi_image_free(data);//释放掉数据
 	return TexBuffer;
 }
+// argc代表的是参数的数量,至少为1 (argv[0] 即.exe文件的路径)
+int main(int argc, char* argv[]) {
+	std::string exePath = argv[0];
+	//std::cout << exePath.substr(0,exePath.find_last_of('\\')) + "\\model\\nanosuit.obj" << std::endl;
 
-int main() {
 #pragma region Open a Window
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);//主版本号
@@ -252,29 +256,32 @@ int main() {
 #pragma endregion
 
 #pragma region Init and Load Models to VAO, VBO
-	unsigned int VAO;//VAO建立
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	//Mesh cube(vertices);
+	Model model(exePath.substr(0, exePath.find_last_of('\\')) + "\\model\\nanosuit.obj");
+	//Model model();
+	//unsigned int VAO;//VAO建立
+	//glGenVertexArrays(1, &VAO);
+	//glBindVertexArray(VAO);
 
-	unsigned int VBO;//VBO建立
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//把这个三角形的顶点放进VBO里面，即让它进到GPU的buffer里面去
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//unsigned int VBO;//VBO建立
+	//glGenBuffers(1, &VBO);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	////把这个三角形的顶点放进VBO里面，即让它进到GPU的buffer里面去
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// 位置属性
-	//glVertexAttribPointer(索引序号，唯独数量，数据类型，是否归一化，字节偏移量，第一个组件的字节偏移量（起始位置）)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	//// 颜色属性
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
-	// 法线
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	// UV
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(3);
+	//// 位置属性
+	////glVertexAttribPointer(索引序号，唯独数量，数据类型，是否归一化，字节偏移量，第一个组件的字节偏移量（起始位置）)
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	//glEnableVertexAttribArray(0);
+	////// 颜色属性
+	////glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	////glEnableVertexAttribArray(1);
+	//// 法线
+	//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	//glEnableVertexAttribArray(2);
+	//// UV
+	//glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	//glEnableVertexAttribArray(3);
 
 #pragma endregion
 
@@ -318,10 +325,10 @@ int main() {
 			// 设置材质 -> Shader代码
 			myShader->use();
 			// 设置材质 -> 贴图
-			glActiveTexture(GL_TEXTURE0);
+			/*glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, myMaterial->diffuse);
 			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_2D, myMaterial->specular);
+			glBindTexture(GL_TEXTURE_2D, myMaterial->specular);*/
 			// 设置材质 -> Uniforms
 			/*glUniform1i(glGetUniformLocation(myShader->ID, "ourTexture"), 0);
 			glUniform1i(glGetUniformLocation(myShader->ID, "ourFace"), 1);*/
@@ -380,11 +387,13 @@ int main() {
 			myMaterial->shader->SetUniform1f("material.shininess", myMaterial->shininess);
 
 			// 设置模型
-			glBindVertexArray(VAO);
+			//glBindVertexArray(VAO);
 
-			// Drawcall
-			glDrawArrays(GL_TRIANGLES, 0, 36);
+			//// Drawcall
+			//glDrawArrays(GL_TRIANGLES, 0, 36);
 			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			//cube.Draw(myMaterial->shader);
+			model.Draw(myMaterial->shader);
 		}
 
 		// 检查并调用事-件，交换缓冲 并为下一次渲染循环做准备
