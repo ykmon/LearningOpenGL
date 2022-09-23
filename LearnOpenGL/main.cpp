@@ -313,7 +313,7 @@ int main(int argc, char* argv[]) {
 
 		viewMat = camera.GetViewMatrix();
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			// ÉèÖÃM¾ØÕó
 			modelMat = glm::translate(glm::mat4(1.0f), cubePositions[i]);
